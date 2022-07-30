@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "target": "ES6",
+    "outFile": "./js/index.js"
+  },
+  "include": ["./ts"]
+}
