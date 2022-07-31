@@ -3,7 +3,9 @@
     "strict": true,
     "noImplicitAny": true,
     "target": "ES6",
-    "outFile": "./js/index.js"
+    "outFile": "./js/index.js",
+    "removeComments": true,
+    
   },
   "include": ["./ts"]
 }
