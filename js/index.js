@@ -1,35 +1,45 @@
 "use strict";
-let spriteImage = new Image();
-spriteImage.src = "./assets/shadow_dog.png";
-const sprite = {
-    image: spriteImage,
-    loc: [
-        { key: "idle", frameY: 0, animFrameCount: 6 },
-        { key: "jumping", frameY: 1, animFrameCount: 6 },
-        { key: "landing", frameY: 2, animFrameCount: 6 },
-        { key: "running", frameY: 3, animFrameCount: 8 },
-        { key: "dizzy", frameY: 4, animFrameCount: 10 },
-    ]
-};
-let animSelector = document.getElementById("animSelect");
+let gameSpeed = 1;
+class Layer {
+    constructor(imageUrl, speedModifier) {
+        this.x = 0;
+        this._image = new Image();
+        this._image.src = imageUrl;
+        this.speed = speedModifier;
+    }
+    draw() {
+        ctx.drawImage(this._image, this.x, 0);
+        ctx.drawImage(this._image, this.x + 2400, 0);
+    }
+    update() {
+        this.x -= this.speed * gameSpeed;
+        if (this.x <= -2400)
+            this.x = 0;
+    }
+}
+let bgImages = new Array(5).fill(1).map((_, i) => {
+    return new Layer(`./assets/parallax/layer-${i + 1}.png`, 1);
+});
 let canvas = document.getElementById("game");
 let ctx = canvas.getContext("2d");
-let currentAnimation = sprite.loc[0];
-animSelector.addEventListener("change", e => {
-    currentAnimation = sprite.loc.find(anim => anim.key === animSelector.value);
+let WIDTH = canvas.width = 800;
+let HEIGHT = canvas.height = 700;
+let speedRange = document.getElementById("speedRange");
+speedRange.addEventListener("change", e => {
+    gameSpeed = parseFloat(speedRange.value);
+    document.getElementById("gameSpeedText").textContent = `${gameSpeed}`;
 });
-let WIDTH = canvas.width = 600;
-let HEIGHT = canvas.height = 600;
-let spriteWidth = 575;
-let spriteHeight = 523;
-let frameX = 0, frameY = 0, frameNo = 0, frameDelay = 5;
-const animate = () => {
+bgImages[0].speed = 2;
+bgImages[1].speed = .5;
+bgImages[2].speed = 3;
+bgImages[3].speed = 2;
+bgImages[4].speed = 5;
+let animate = () => {
     ctx.clearRect(0, 0, WIDTH, HEIGHT);
-    ctx.drawImage(sprite.image, frameX * spriteWidth, currentAnimation.frameY * spriteHeight, spriteWidth, spriteHeight, 0, 0, spriteWidth, spriteHeight);
-    if (frameNo % frameDelay === 0) {
-        frameX >= currentAnimation.animFrameCount ? frameX = 0 : frameX++;
-    }
-    frameNo++;
+    bgImages.forEach(img => {
+        img.draw();
+        img.update();
+    });
     requestAnimationFrame(animate);
 };
 animate();

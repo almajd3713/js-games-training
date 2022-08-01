@@ -8,14 +8,9 @@
   <link rel="stylesheet" href="assets/css.css">
 </head>
 <body>
-  <select name="animationType" id="animSelect">
-    <option value="idle">Idle</option>
-    <option value="jumping">Jumping</option>
-    <option value="landing">Landing</option>
-    <option value="running">Running</option>
-    <option value="dizzy">Pondering Planet</option>
-  </select>
   <canvas id="game"></canvas>
+  <div style="font-size: 2rem">Game Speed: <span id="gameSpeedText" >1</span></div>
+  <input id="speedRange" type="range" min="0" max="2.5" step="0.25" value="1" style="width: 30rem;">
   <script src="./js/index.js"></script>
 </body>
 </html>
